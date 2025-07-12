@@ -53,7 +53,7 @@ const findAddress = useCallback(() => {
   setMapError(null);
 
   const fullAddress = `${city}, ${address}`;
-
+  
   window.ymaps.geocode(fullAddress, { results: 1 })
     .then((res) => {
       const firstGeoObject = res.geoObjects.get(0);

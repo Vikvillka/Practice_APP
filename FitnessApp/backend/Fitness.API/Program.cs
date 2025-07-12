@@ -21,11 +21,9 @@ using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Конфигурация базы данных (должно быть ПЕРВЫМ)
 builder.Services.AddDbContext<FitnessContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL")));
 
-// 2. Identity configuration
 builder.Services.AddIdentity<AppUser, IdentityRole<int>>(options =>
 {
     options.Password.RequiredLength = 8;
@@ -36,7 +34,6 @@ builder.Services.AddIdentity<AppUser, IdentityRole<int>>(options =>
 .AddEntityFrameworkStores<FitnessContext>()
 .AddDefaultTokenProviders();
 
-// 3. Регистрация репозиториев с явным указанием контекста
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IRepository<Token>>(provider =>
     new Repository<Token>(provider.GetRequiredService<FitnessContext>()));
@@ -51,16 +48,15 @@ builder.Services.AddScoped<IRepository<Training>>(provider =>
 builder.Services.AddScoped<IRepository<Order>>(provider =>
     new Repository<Order>(provider.GetRequiredService<FitnessContext>()));
 
-// Увеличиваем лимиты для загрузки файлов
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.Limits.MaxRequestBodySize = 20_000_000; // 20MB
+    options.Limits.MaxRequestBodySize = 20_000_000; 
 });
 
 builder.Services.Configure<FormOptions>(options =>
 {
-    options.MultipartBodyLengthLimit = 20_000_000; // 20MB
-    options.MemoryBufferThreshold = 2_000_000; // 2MB
+    options.MultipartBodyLengthLimit = 20_000_000; 
+    options.MemoryBufferThreshold = 2_000_000; 
     options.ValueLengthLimit = int.MaxValue;
     options.MultipartHeadersLengthLimit = int.MaxValue;
 });
@@ -77,7 +73,6 @@ builder.Services.AddHttpClient("WebDAV")
         ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
     });
 
-// 4. Регистрация сервисов
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -93,7 +88,6 @@ builder.Services.AddSingleton<ICloudStorageService>(new WebDavStorageService(
     "trainers"
 ));
 
-// 5. JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]);
 
@@ -129,7 +123,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
 
-// 7. Swagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Fitness API", Version = "v1" });
@@ -159,7 +152,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// 8. CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -173,7 +165,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Применение миграций
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -190,7 +181,6 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Конфигурация middleware
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors("AllowAll");

@@ -44,18 +44,17 @@ namespace Fitness.Infrastructure.External
                     var fullPath = $"{_basePath}/{Guid.NewGuid()}{Path.GetExtension(fileName)}";
                     var requestUri = new Uri(new Uri(_webDavUrl), fullPath);
 
-                    _logger?.LogInformation($"Upload attempt {retryCount + 1} for file: {fileName}");
+                    _logger?.LogInformation($"Попытка загрузки {retryCount + 1} : {fileName}");
 
                     var request = (HttpWebRequest)WebRequest.Create(requestUri);
                     request.Method = "PUT";
                     request.Credentials = new NetworkCredential(_username, _password);
                     request.ContentType = "application/octet-stream";
-                    request.Timeout = 300000; // 5 минут
+                    request.Timeout = 300000; 
                     request.ReadWriteTimeout = 300000;
-                    request.KeepAlive = false; // Отключаем Keep-Alive
+                    request.KeepAlive = false; 
                     request.ServicePoint.Expect100Continue = false;
 
-                    // Сбрасываем позицию потока на случай повторной попытки
                     if (fileStream.CanSeek)
                     {
                         fileStream.Position = 0;
@@ -87,7 +86,7 @@ namespace Fitness.Infrastructure.External
                         }
                     }
 
-                    _logger?.LogInformation($"File uploaded successfully: {requestUri}");
+                    _logger?.LogInformation($"Файл успешно загружен: {requestUri}");
                     return requestUri.ToString();
                 }
                 catch (WebException ex) when (ex.Status == WebExceptionStatus.ConnectFailure ||
@@ -96,20 +95,19 @@ namespace Fitness.Infrastructure.External
                 {
                     lastException = ex;
                     retryCount++;
-                    _logger?.LogWarning($"Upload failed, retry {retryCount}/{maxRetries}. Error: {ex.Message}");
+                    _logger?.LogWarning($"Загрузка не удалась, повторите попытку {retryCount}/{maxRetries}. Error: {ex.Message}");
 
-                    // Ждем перед повторной попыткой
                     await Task.Delay(1000 * retryCount);
                 }
                 catch (Exception ex)
                 {
-                    _logger?.LogError(ex, "Error uploading file to WebDAV");
+                    _logger?.LogError(ex, "Ошибка загрузки файла");
                     throw;
                 }
             }
 
-            _logger?.LogError(lastException, "All upload attempts failed");
-            throw new Exception("Failed to upload file after multiple attempts", lastException);
+            _logger?.LogError(lastException, "Все попытки загрузки не удались");
+            throw new Exception("Не удалось загрузить файл после нескольких попыток", lastException);
         }
 
         private async Task CreateDirectoryIfNotExists(string path)
@@ -136,13 +134,12 @@ namespace Fitness.Infrastructure.External
                         if (response.StatusCode != HttpStatusCode.Created &&
                             response.StatusCode != HttpStatusCode.OK)
                         {
-                            _logger?.LogWarning($"Failed to create directory {currentPath}: {response.StatusCode}");
+                            _logger?.LogWarning($"Не удалось создать каталог {currentPath}: {response.StatusCode}");
                         }
                     }
                 }
                 catch (WebException ex) when ((ex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.MethodNotAllowed)
                 {
-                    // Директория уже существует
                     continue;
                 }
             }

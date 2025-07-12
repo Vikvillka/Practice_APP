@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Fitness.API.DTOs.Trainer;
+using System.Text.Json.Serialization;
 
 namespace Fitness.API.DTOs.Template
 {
@@ -16,5 +17,7 @@ namespace Fitness.API.DTOs.Template
         public int Duration { get; set; }
         [JsonPropertyName("MaxParticipants")]
         public int MaxParticipants { get; set; }
+        [JsonPropertyName("Trainer")]
+        public TrainerDto Trainer { get; set; }
     }
 }

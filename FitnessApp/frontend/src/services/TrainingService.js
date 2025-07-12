@@ -3,7 +3,7 @@ import axiosBaseQuery from '../http/axiosBaseQuery'
 
 export const trainingAPI = createApi({
     reducerPath: 'trainingAPI',
-    baseQuery: axiosBaseQuery({ baseUrl: 'http://localhost:5000/api/training' }),
+    baseQuery: axiosBaseQuery({ baseUrl: 'https://localhost:7066/api/training' }),
     endpoints: (build) => ({
         fetchAllTrainings: build.query({
             query: () => {

@@ -42,6 +42,5 @@ namespace Fitness.API.DTOs.Trainer
 
         [JsonPropertyName("User")]
         public UserDto User { get; set; }
-        //public string CenterName { get; set; }
     }
 }

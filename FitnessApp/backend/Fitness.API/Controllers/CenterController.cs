@@ -64,9 +64,9 @@ namespace Fitness.API.Controllers
                     Longitude = center.Longitude
                 });
             }
-            catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            catch (ApiException ex) 
             {
-                return NotFound(new { ex.ErrorCode, ex.Message });
+                return StatusCode((int)ex.StatusCode, new { ex.ErrorCode, ex.Message });
             }
             catch (Exception ex)
             {
@@ -113,9 +113,9 @@ namespace Fitness.API.Controllers
             {
                 return BadRequest(new { Errors = ex.Errors });
             }
-            catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.Conflict)
+            catch (ApiException ex) 
             {
-                return Conflict(new { ex.ErrorCode, ex.Message });
+                return StatusCode((int)ex.StatusCode, new { ex.ErrorCode, ex.Message });
             }
             catch (Exception ex)
             {
@@ -153,13 +153,9 @@ namespace Fitness.API.Controllers
             {
                 return BadRequest(new { Errors = ex.Errors });
             }
-            catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            catch (ApiException ex)
             {
-                return NotFound(new { ex.ErrorCode, ex.Message });
-            }
-            catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.Conflict)
-            {
-                return Conflict(new { ex.ErrorCode, ex.Message });
+                return StatusCode((int)ex.StatusCode, new { ex.ErrorCode, ex.Message });
             }
             catch (Exception ex)
             {
@@ -177,9 +173,9 @@ namespace Fitness.API.Controllers
                 await _centerService.Delete(centerId);
                 return Ok();
             }
-            catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            catch (ApiException ex) 
             {
-                return NotFound(new { ex.ErrorCode, ex.Message });
+                return StatusCode((int)ex.StatusCode, new { ex.ErrorCode, ex.Message });
             }
             catch (Exception ex)
             {

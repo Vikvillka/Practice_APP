@@ -92,13 +92,11 @@ namespace Fitness.Infrastructure.Services
             {
                 if (imageFile != null)
                 {
-                    // Проверка размера файла
-                    if (imageFile.Length > 10 * 1024 * 1024) // 10MB
+                    if (imageFile.Length > 10 * 1024 * 1024) 
                     {
                         throw new ApiException("FILE_TOO_LARGE", "Размер файла не должен превышать 10MB", HttpStatusCode.BadRequest);
                     }
 
-                    // Используем MemoryStream для надежной работы с файлом
                     using var memoryStream = new MemoryStream();
                     await imageFile.CopyToAsync(memoryStream);
                     memoryStream.Position = 0;

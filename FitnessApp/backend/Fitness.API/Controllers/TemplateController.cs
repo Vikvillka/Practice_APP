@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Net;
 using System.Threading.Tasks;
 using Fitness.API.DTOs.Template;
+using Fitness.API.DTOs.Trainer;
 
 namespace Fitness.API.Controllers
 {
@@ -32,14 +33,19 @@ namespace Fitness.API.Controllers
             try
             {
                 var templates = await _templateService.GetAll();
-                return Ok(templates.Select(c => new TemplateDto
+                return Ok(templates.Select(template => new TemplateDto
                 {
-                    TemplateId = c.TemplateId,
-                    TrainerId = c.TrainerId,
-                    Title = c.Title,
-                    Description = c.Description,
-                    Duration = c.Duration,
-                    MaxParticipants = c.MaxParticipants
+                    TemplateId = template.TemplateId,
+                    TrainerId = template.TrainerId,
+                    Title = template.Title,
+                    Description = template.Description,
+                    Duration = template.Duration,
+                    MaxParticipants = template.MaxParticipants,
+                    Trainer = template.Trainer != null ? new TrainerDto
+                    {
+                        TrainerId = template.Trainer.TrainerId,
+                        CenterId = template.Trainer.CenterId
+                    } : null
                 }));
             }
             catch (Exception ex)
@@ -62,12 +68,17 @@ namespace Fitness.API.Controllers
                     Title = template.Title,
                     Description = template.Description,
                     Duration = template.Duration,
-                    MaxParticipants = template.MaxParticipants
+                    MaxParticipants = template.MaxParticipants,
+                    Trainer = template.Trainer != null ? new TrainerDto
+                    {
+                        TrainerId = template.Trainer.TrainerId,
+                        CenterId = template.Trainer.CenterId
+                    } : null
                 });
             }
-            catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            catch (ApiException ex) 
             {
-                return NotFound(new { ex.ErrorCode, ex.Message });
+                return StatusCode((int)ex.StatusCode, new { ex.ErrorCode, ex.Message });
             }
             catch (Exception ex)
             {
@@ -89,12 +100,12 @@ namespace Fitness.API.Controllers
                     Title = t.Title,
                     Description = t.Description,
                     Duration = t.Duration,
-                    MaxParticipants = t.MaxParticipants
+                    MaxParticipants = t.MaxParticipants, 
                 }));
             }
-            catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            catch (ApiException ex) 
             {
-                return NotFound(new { ex.ErrorCode, ex.Message });
+                return StatusCode((int)ex.StatusCode, new { ex.ErrorCode, ex.Message });
             }
             catch (Exception ex)
             {
@@ -140,7 +151,7 @@ namespace Fitness.API.Controllers
             }
             catch (ApiException ex)
             {
-                return NotFound(new { ex.ErrorCode, ex.Message });
+                return StatusCode((int)ex.StatusCode, new { ex.ErrorCode, ex.Message });
             }
             catch (Exception ex)
             {
@@ -157,9 +168,9 @@ namespace Fitness.API.Controllers
                 await _templateService.DeleteById(templateId);
                 return Ok();
             }
-            catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            catch (ApiException ex) 
             {
-                return NotFound(new { ex.ErrorCode, ex.Message });
+                return StatusCode((int)ex.StatusCode, new { ex.ErrorCode, ex.Message });
             }
             catch (Exception ex)
             {

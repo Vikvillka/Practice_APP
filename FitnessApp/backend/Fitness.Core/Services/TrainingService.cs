@@ -34,7 +34,7 @@ namespace Fitness.Core.Services
         public async Task<IEnumerable<Training>> GetAll()
         {
             await CheckAndCloseExpiredTrainings();
-            var trainings = await _trainingRepository.GetWhereAsync(t => t.Status != TrainingStatus.Cancelled);
+            var trainings = await _trainingRepository.GetAllAsync();
             var templateIds = trainings.Select(t => t.TemplateId).Distinct().ToList();
             var trainerIds = trainings.Select(t => t.TrainerId).Distinct().ToList();
 
@@ -48,6 +48,9 @@ namespace Fitness.Core.Services
                     DateTime = t.DateTime,
                     Status = t.Status,
                     Price = t.Price,
+                    TemplateId = t.TemplateId,
+                    TrainerId = t.TrainerId,
+                    CenterId = t.CenterId,
                     Template = templates.FirstOrDefault(temp => temp.TemplateId == t.TemplateId),
                     Trainer = trainers.FirstOrDefault(tr => tr.TrainerId == t.TrainerId),
                 })
@@ -105,6 +108,15 @@ namespace Fitness.Core.Services
 
         public async Task Add(Training training)
         {
+            training.Template = await _templateRepository.GetByIdAsync(training.TemplateId);
+            if (training.Template == null)
+            {
+                throw new ApiException(
+                    "TEMPLATE_NOT_FOUND",
+                    "Шаблон тренировки не найден",
+                    HttpStatusCode.BadRequest);
+            }
+
             ValidateTraining(training);
             await CheckTrainingConflicts(training);
 

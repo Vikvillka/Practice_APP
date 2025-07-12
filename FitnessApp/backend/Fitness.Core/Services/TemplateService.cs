@@ -28,7 +28,24 @@ namespace Fitness.Core.Services
 
         public async Task<IEnumerable<Template>> GetAll()
         {
-            return await _templateRepository.GetAllAsync();
+            var templates = await _templateRepository.GetAllAsync();
+
+            var trainerIds = templates.Where(t => t.TrainerId != 0)
+                .Select(t => t.TrainerId).ToList();
+
+            var trainers = await _trainerRepository.GetWhereAsync(t => trainerIds.Contains(t.TrainerId));
+
+            var trainersDict = trainers.ToDictionary(t => t.TrainerId, t => t);
+
+            foreach (var template in templates)
+            {
+                if (template.TrainerId != 0 && trainersDict.TryGetValue(template.TrainerId, out var trainer))
+                {
+                    template.Trainer = trainer;
+                }
+            }
+
+            return templates;
         }
 
         public async Task<Template?> GetById(int id)
