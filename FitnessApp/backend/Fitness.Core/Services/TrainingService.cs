@@ -17,18 +17,24 @@ namespace Fitness.Core.Services
         private readonly IRepository<Template> _templateRepository;
         private readonly IRepository<Trainer> _trainerRepository;
         private readonly IRepository<Center> _centerRepository;
+        private readonly IUserService _userService;
+        private readonly ITrainerService _trainerService;
 
         public TrainingService(
             IRepository<Training> trainingRepository,
             IRepository<Template> templateRepository,
             IRepository<Trainer> trainerRepository,
             IRepository<Center> centerRepository,
-            IRepository<Order> orderRepository)
+            IRepository<Order> orderRepository,
+            IUserService userService,
+            ITrainerService trainerService)
         {
             _trainingRepository = trainingRepository;
             _templateRepository = templateRepository;
             _trainerRepository = trainerRepository;
             _centerRepository = centerRepository;
+            _userService = userService;
+            _trainerService = trainerService;
         }
 
         public async Task<IEnumerable<Training>> GetAll()
@@ -41,18 +47,29 @@ namespace Fitness.Core.Services
             var templates = await _templateRepository.GetWhereAsync(t => templateIds.Contains(t.TemplateId));
             var trainers = await _trainerRepository.GetWhereAsync(t => trainerIds.Contains(t.TrainerId));
 
+            var userIds = trainers.Select(t => t.UserId).Distinct().ToList();
+            var usersDict = await _userService.GetUsersByIdsAsync(userIds);
             return trainings
-                .Select(t => new Training
+                .Select(t => 
                 {
-                    TrainingId = t.TrainingId,
-                    DateTime = t.DateTime,
-                    Status = t.Status,
-                    Price = t.Price,
-                    TemplateId = t.TemplateId,
-                    TrainerId = t.TrainerId,
-                    CenterId = t.CenterId,
-                    Template = templates.FirstOrDefault(temp => temp.TemplateId == t.TemplateId),
-                    Trainer = trainers.FirstOrDefault(tr => tr.TrainerId == t.TrainerId),
+                    var trainer = trainers.FirstOrDefault(tr => tr.TrainerId == t.TrainerId);
+
+                    if (trainer != null && usersDict.TryGetValue(trainer.UserId, out var user)) 
+                    {
+                        trainer.User = user;
+                    }
+                    return new Training
+                    {
+                        TrainingId = t.TrainingId,
+                        DateTime = t.DateTime,
+                        Status = t.Status,
+                        Price = t.Price,
+                        TemplateId = t.TemplateId,
+                        TrainerId = t.TrainerId,
+                        CenterId = t.CenterId,
+                        Template = templates.FirstOrDefault(temp => temp.TemplateId == t.TemplateId),
+                        Trainer = trainer,
+                    };
                 })
                 .OrderBy(t => t.DateTime)
                 .ToList();
@@ -78,7 +95,7 @@ namespace Fitness.Core.Services
         public async Task<IEnumerable<Training>> GetByIdTrainer(int id)
         {
             await CheckAndCloseExpiredTrainings();
-            var trainer = await _trainerRepository.GetByIdAsync(id);
+            var trainer = await _trainerService.GetByIdAsync(id);
             if (trainer == null)
             {
                 throw new ApiException(
@@ -87,7 +104,7 @@ namespace Fitness.Core.Services
                         HttpStatusCode.NotFound);
             }
             var trainings = await _trainingRepository.GetWhereAsync(t =>
-               t.TrainerId == id && t.Status != TrainingStatus.Cancelled);
+               t.Trainer.UserId == id );
 
             var templateIds = trainings.Select(t => t.TemplateId).Distinct();
 

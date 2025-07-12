@@ -38,7 +38,7 @@ export const trainingAPI = createApi({
         cancellTraining: build.mutation({
             query: (trainingID) =>{
                 return {
-                    url: `/${trainingID}/cancell`,
+                    url: `/${trainingID}/cancel`,
                     method: 'PUT',
                 }
             }

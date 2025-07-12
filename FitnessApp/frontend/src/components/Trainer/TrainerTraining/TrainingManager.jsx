@@ -30,7 +30,7 @@ const TrainingManager = () => {
     const { store } = useContext(Context);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-    const userId = store.user.UserID;
+    const userId = store.user.UserId;
     const { data: trainings = [], error, isLoading, refetch } = trainingAPI.useFetchTrainingForTrainerByIDQuery(userId);
     const [cancellTraining] = trainingAPI.useCancellTrainingMutation(); 
     const [isError, setIsError] = useState(null);
@@ -40,26 +40,26 @@ const TrainingManager = () => {
     const [isLoadingAction, setIsLoadingAction] = useState(false);
     const [trainingParticipants, setTrainingParticipants] = useState([]);
     const { data: orders, refetch: refetchOrders } = orderAPI.useFetchOrderForTrainingByIDQuery(
-        selectedTraining?.TrainingID, 
+        selectedTraining?.TrainingId, 
         { skip: !selectedTraining }
     );
 
     useEffect(() => {
         if (selectedTraining && orders) {
             const userOrdersMap = orders
-                .filter(order => order.TrainingID === selectedTraining.TrainingID)
+                .filter(order => order.TrainingId === selectedTraining.TrainingId)
                 .reduce((acc, order) => {
-                    if (!acc[order.UserID]) {
-                        acc[order.UserID] = [];
+                    if (!acc[order.UserId]) {
+                        acc[order.UserId] = [];
                     }
-                    acc[order.UserID].push(order);
+                    acc[order.UserId].push(order);
                     return acc;
                 }, {});
 
             const participants = Object.values(userOrdersMap).map(userOrders => {
                 const sortedOrders = [...userOrders].sort((a, b) => {
-                    if (a.Status === 'active' && b.Status !== 'active') return -1;
-                    if (a.Status !== 'active' && b.Status === 'active') return 1;
+                    if (a.Status === 'Active' && b.Status !== 'Active') return -1;
+                    if (a.Status !== 'Active' && b.Status === 'Active') return 1;
                     return new Date(b.createdAt) - new Date(a.createdAt);
                 });
 
@@ -77,7 +77,7 @@ const TrainingManager = () => {
     const handleCancell = async (training) => {
         try {
             setIsLoadingAction(true);
-            await cancellTraining(training.TrainingID).unwrap();
+            await cancellTraining(training.TrainingId).unwrap();
             refetch();
             refetchOrders();
             setOpenModal(false);
@@ -270,15 +270,15 @@ const TrainingManager = () => {
                                             {dayTrainings.length > 0 ? (
                                                 dayTrainings.map(training => (
                                                     <Card 
-                                                        key={training.TrainingID} 
+                                                        key={training.TrainingId} 
                                                         onClick={() => handleOpenModal(training)}
                                                         sx={{ 
                                                             mb: 2,
                                                             cursor: 'pointer',
-                                                            bgcolor: training.Status === 'cancelled' ? '#ffebee' : 'white',
+                                                            bgcolor: training.Status === 'Cancelled' ? '#ffebee' : 'white',
                                                             borderLeft: '3px solid',
-                                                            borderLeftColor: training.Status === 'cancelled' ? '#f44336' : '#e37243',
-                                                            opacity: training.Status === 'closed' || training.Status === 'cancelled' ? 0.6 : 1,
+                                                            borderLeftColor: training.Status === 'Cancelled' ? '#f44336' : '#e37243',
+                                                            opacity: training.Status === 'Closed' || training.Status === 'Cancelled' ? 0.6 : 1,
                                                             position: 'relative',
                                                             transition: 'opacity 0.3s ease',
                                                             '&:hover': {
@@ -286,7 +286,7 @@ const TrainingManager = () => {
                                                             }
                                                         }}
                                                     >
-                                                        {training.Status === 'closed' && (
+                                                        {training.Status === 'Closed' && (
                                                             <Chip
                                                                 label="Проведена"
                                                                 size="small"
@@ -316,10 +316,10 @@ const TrainingManager = () => {
                                                             </Typography>
                                                             <Typography 
                                                                 variant="caption" 
-                                                                color={training.Status === 'cancelled' ? '#f44336' : '#2E2E2E'}
+                                                                color={training.Status === 'Cancelled' ? '#f44336' : '#2E2E2E'}
                                                             >
-                                                                {training.Status === 'cancelled' ? 'Отменена' : 
-                                                                training.Status === 'closed' ? 'Проведена' : 'Активна'}
+                                                                {training.Status === 'Cancelled' ? 'Отменена' : 
+                                                                training.Status === 'Closed' ? 'Проведена' : 'Активна'}
                                                             </Typography>
                                                             <Typography variant="caption" display="block" color="#666">
                                                                 Участников: {training.CurrentParticipants}/{training.Template.MaxParticipants}
@@ -396,19 +396,19 @@ const TrainingManager = () => {
                             </Box>
 
                             <Box sx={{ 
-                                bgcolor: selectedTraining.Status === 'cancelled' ? '#ffebee' : 
-                                        selectedTraining.Status === 'closed' ? '#e8f5e9' : '#f5f5f5',
+                                bgcolor: selectedTraining.Status === 'Cancelled' ? '#ffebee' : 
+                                        selectedTraining.Status === 'Closed' ? '#e8f5e9' : '#f5f5f5',
                                 p: 2, 
                                 borderRadius: 1,
                                 my: 2
                             }}>
                                 <Typography variant="body1" color={
-                                    selectedTraining.Status === 'cancelled' ? '#d32f2f' : 
-                                    selectedTraining.Status === 'closed' ? '#2e7d32' : '#2E2E2E'
+                                    selectedTraining.Status === 'Cancelled' ? '#d32f2f' : 
+                                    selectedTraining.Status === 'Closed' ? '#2e7d32' : '#2E2E2E'
                                 }>
                                     <strong>Статус:</strong> {
-                                        selectedTraining.Status === 'cancelled' ? 'Отменена' : 
-                                        selectedTraining.Status === 'closed' ? 'Проведена' : 'Активна'
+                                        selectedTraining.Status === 'Cancelled' ? 'Отменена' : 
+                                        selectedTraining.Status === 'Closed' ? 'Проведена' : 'Активна'
                                     }
                                 </Typography>
                             </Box>
@@ -429,7 +429,7 @@ const TrainingManager = () => {
                                     </Typography>
                                     <List dense sx={{ maxHeight: 200, overflow: 'auto' }}>
                                         {trainingParticipants.map(user => (
-                                            <ListItem key={user.UserID}>
+                                            <ListItem key={user.UserId}>
                                                 <ListItemAvatar>
                                                     <Avatar sx={{ bgcolor: '#e37243' }}>
                                                         <PersonIcon />
@@ -441,7 +441,7 @@ const TrainingManager = () => {
                                                             <Typography component="span">
                                                                 {user.FirstName} {user.LastName}
                                                             </Typography>
-                                                            {user.orderStatus === 'cancelled' && (
+                                                            {user.orderStatus === 'Cancelled' && (
                                                                 <Chip 
                                                                     label="Отменил запись"
                                                                     size="small"
@@ -480,25 +480,25 @@ const TrainingManager = () => {
                                 fullWidth
                                 variant="contained"
                                 sx={{
-                                    backgroundColor: selectedTraining.Status === 'cancelled' ? '#ccc' : 
-                                                   selectedTraining.Status === 'closed' ? '#81c784' : '#e37243',
+                                    backgroundColor: selectedTraining.Status === 'Cancelled' ? '#ccc' : 
+                                                   selectedTraining.Status === 'Closed' ? '#81c784' : '#e37243',
                                     color: 'white',
                                     py: 1.5,
                                     '&:hover': { 
-                                        backgroundColor: selectedTraining.Status === 'cancelled' ? '#ccc' : 
-                                                       selectedTraining.Status === 'closed' ? '#81c784' : '#DF8A51' 
+                                        backgroundColor: selectedTraining.Status === 'Cancelled' ? '#ccc' : 
+                                                       selectedTraining.Status === 'Closed' ? '#81c784' : '#DF8A51' 
                                     }
                                 }}
                                 onClick={() => handleCancell(selectedTraining)}
-                                disabled={selectedTraining.Status === 'cancelled' || 
-                                          selectedTraining.Status === 'closed' || 
+                                disabled={selectedTraining.Status === 'Cancelled' || 
+                                          selectedTraining.Status === 'Closed' || 
                                           isLoadingAction}
                             >
                                 {isLoadingAction 
                                     ? <CircularProgress size={24} color="inherit" /> 
-                                    : selectedTraining.Status === 'cancelled' 
+                                    : selectedTraining.Status === 'Cancelled' 
                                         ? 'Тренировка отменена' 
-                                        : selectedTraining.Status === 'closed'
+                                        : selectedTraining.Status === 'Closed'
                                             ? 'Тренировка проведена'
                                             : 'Отменить тренировку'}
                             </Button>

@@ -69,7 +69,7 @@ const TrainerQuickNav = () => {
           <Tooltip title="Управление моими тренировками" arrow>
             <Box
               component={NavLink}
-              to={`/trainer/training/${store.user.UserID}/trainings`}
+              to={`/trainer/training/${store.user.UserId}/trainings`}
               sx={{
                 p: 2,
                 borderRadius: 1,
@@ -119,7 +119,7 @@ const TrainerQuickNav = () => {
           <Tooltip title="Управление моими шаблонами" arrow>
             <Box
               component={NavLink}
-              to={`/trainer/template/${store.user.UserID}/templates`}
+              to={`/trainer/template/${store.user.UserId}/templates`}
               sx={{
                 p: 2,
                 borderRadius: 1,

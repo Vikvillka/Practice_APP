@@ -15,15 +15,18 @@ namespace Fitness.Core.Services
         private readonly IRepository<Template> _templateRepository;
         private readonly IRepository<Trainer> _trainerRepository;
         private readonly IRepository<Training> _trainingRepository;
+        private readonly IUserService _userService;
 
         public TemplateService(
            IRepository<Template> templateRepository,
            IRepository<Trainer> trainerRepository,
-           IRepository<Training> trainingRepository)
+           IRepository<Training> trainingRepository,
+           IUserService userService)
         {
             _templateRepository = templateRepository;
             _trainerRepository = trainerRepository;
             _trainingRepository = trainingRepository;
+            _userService = userService;
         }
 
         public async Task<IEnumerable<Template>> GetAll()
@@ -37,11 +40,20 @@ namespace Fitness.Core.Services
 
             var trainersDict = trainers.ToDictionary(t => t.TrainerId, t => t);
 
+            var userIds = trainers.Select(t => t.UserId).Distinct().ToList();
+
+            var usersDict = await _userService.GetUsersByIdsAsync(userIds);
+
             foreach (var template in templates)
             {
-                if (template.TrainerId != 0 && trainersDict.TryGetValue(template.TrainerId, out var trainer))
+                if (template.TrainerId != 0)
                 {
-                    template.Trainer = trainer;
+                    var trainer = trainers.FirstOrDefault(t => t.TrainerId == template.TrainerId);
+                    if (trainer != null && usersDict.TryGetValue(trainer.UserId, out var user))
+                    {
+                        template.Trainer = trainer;
+                        template.Trainer.User = user;
+                    }
                 }
             }
 

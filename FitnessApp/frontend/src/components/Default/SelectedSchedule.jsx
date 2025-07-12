@@ -246,8 +246,8 @@ const timeSlots = useMemo(() => {
     if (!center) return <div style={{ color: 'gray' }}>Центр с названием "{decodedCenterName}" не найден.</div>;
 
     const handleOpenModal = (training) => {
-      if (training.Status === 'closed' || 
-          training.Status === 'cancelled' ||
+      if (training.Status === 'Closed' || 
+          training.Status === 'Cancelled' ||
           dayjs(training.DateTime).isBefore(dayjs(), 'day')) {
         return;
       }
@@ -268,8 +268,8 @@ const timeSlots = useMemo(() => {
           return;
       }
 
-      if (selectedTraining.Status === 'closed' || 
-          selectedTraining.Status === 'cancelled' ||
+      if (selectedTraining.Status === 'Closed' || 
+          selectedTraining.Status === 'Cancelled' ||
           selectedTraining.CurrentParticipants >= selectedTraining.Template.MaxParticipants) {
           setError('Тренировка закрыта для записи');
           setTimeout(() => setError(null), 3000);
@@ -316,8 +316,8 @@ const timeSlots = useMemo(() => {
     };
 
     const isTrainingDisabled = (training) => {
-      return training.Status === 'closed' || 
-             training.Status === 'cancelled' ||
+      return training.Status === 'Closed' || 
+             training.Status === 'Cancelled' ||
              dayjs(training.DateTime).isBefore(dayjs(), 'day');
     };
 
@@ -371,19 +371,19 @@ const timeSlots = useMemo(() => {
                       <Box sx={{ display: 'flex', justifyContent: 'flex-start', width: '100%' }}>
                         <Chip
                           label={
-                            training.Status === 'cancelled' ? 'Отменена' :
-                            training.Status === 'closed' ? 'Закрыта' :
+                            training.Status === 'Cancelled' ? 'Отменена' :
+                            training.Status === 'Closed' ? 'Закрыта' :
                             training.CurrentParticipants >= training.Template.MaxParticipants ? 'Заполнена' : 'Доступна'
                           }
                           size="small"
                           sx={{
                             backgroundColor: 
-                              training.Status === 'cancelled' ? '#ffebee' :
-                              training.Status === 'closed' ? '#d8d9d7' :
+                              training.Status === 'Cancelled' ? '#ffebee' :
+                              training.Status === 'Closed' ? '#d8d9d7' :
                               training.CurrentParticipants >= training.Template.MaxParticipants ? '#fff3e0' : '#e8f5e9',
                             color: 
-                              training.Status === 'cancelled' ? '#c62828' :
-                              training.Status === 'closed' ? '#3a3a3a' :
+                              training.Status === 'Cancelled' ? '#c62828' :
+                              training.Status === 'Closed' ? '#3a3a3a' :
                               training.CurrentParticipants >= training.Template.MaxParticipants ? '#e65100' : '#2e7d32'
                           }}
                         />
@@ -804,7 +804,7 @@ const timeSlots = useMemo(() => {
                                     my: 2
                                 }}>
                                     <Typography variant="body1" color="#2E2E2E">
-                                        <strong>Статус:</strong> {selectedTraining.Status === 'closed' || 
+                                        <strong>Статус:</strong> {selectedTraining.Status === 'Closed' || 
                                         (Number(selectedTraining.Template.MaxParticipants)) - 
                                         (Number(selectedTraining.CurrentParticipants)) === 0 ? 'Закрыта' : 'Открыта'}
                                     </Typography>
@@ -904,8 +904,8 @@ const timeSlots = useMemo(() => {
                                             onClick={handleRegister}
                                             disabled={
                                                 isLoading || 
-                                                selectedTraining.Status === 'closed' || 
-                                                selectedTraining.Status === 'cancelled' ||
+                                                selectedTraining.Status === 'Closed' || 
+                                                selectedTraining.Status === 'Cancelled' ||
                                                 selectedTraining.CurrentParticipants >= selectedTraining.Template.MaxParticipants
                                             }
                                         >

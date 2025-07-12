@@ -43,7 +43,7 @@ const TemplateManager = () => {
     const [templateToDelete, setTemplateToDelete] = useState(null);
 
     const isTemplateUsed = (templateId) => {
-        return trainingsAll.some(training => training.TemplateId === templateId &&  training.Status === 'active');
+        return trainingsAll.some(training => training.TemplateId === templateId &&  training.Status === 'Active');
     };
  
     const handleDeleteClick = (templateId) => {

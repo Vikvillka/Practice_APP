@@ -44,11 +44,14 @@ namespace Fitness.API.Controllers
                     {
                         TemplateId = t.Template.TemplateId,
                         Title = t.Template.Title,
+                        Description = t.Template.Description,
+                        MaxParticipants = t.Template.MaxParticipants,
                         Duration = t.Template.Duration
                     } : null,
                     Trainer = t.Trainer != null ? new TrainerDto
                     {
                         TrainerId = t.Trainer.TrainerId,
+                        UserId = t.Trainer.UserId,
                         FirstName = t.Trainer.User?.FirstName,
                         LastName = t.Trainer.User?.LastName
                     } : null
@@ -80,7 +83,9 @@ namespace Fitness.API.Controllers
                     {
                         TemplateId = training.Template.TemplateId,
                         Title = training.Template.Title,
-                        Duration = training.Template.Duration
+                        Duration = training.Template.Duration,
+                        Description = training.Template.Description,
+                        MaxParticipants = training.Template.MaxParticipants,
                     } : null,
                     Trainer = training.Trainer != null ? new TrainerDto
                     {
@@ -101,7 +106,7 @@ namespace Fitness.API.Controllers
             }
         }
 
-        [HttpGet("trainer/{userId}")]
+        [HttpGet("{userId}/training")]
         public async Task<IActionResult> GetTrainingsForTrainer(int userId)
         {
             try
@@ -120,6 +125,8 @@ namespace Fitness.API.Controllers
                     {
                         TemplateId = t.Template.TemplateId,
                         Title = t.Template.Title,
+                        Description = t.Template.Description,
+                        MaxParticipants = t.Template.MaxParticipants,
                         Duration = t.Template.Duration
                     } : null
                 }));

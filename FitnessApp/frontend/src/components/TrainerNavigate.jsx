@@ -32,14 +32,14 @@ const TrainerNavigate = () => {
       label: "Тренировки",
       subItems: [
         { path: "/trainer/training/create", label: "Добавить тренировку" },
-        { path: `/trainer/training/${store.user.UserID}/trainings`, label: "Управление тренировками" }
+        { path: `/trainer/training/${store.user.UserId}/trainings`, label: "Управление тренировками" }
       ]
     },
     {
       label: "Шаблоны",
       subItems: [
         { path: "/trainer/template/create", label: "Добавить шаблон" },
-        { path: `/trainer/template/${store.user.UserID}/templates`, label: "Управление шаблонами" }
+        { path: `/trainer/template/${store.user.UserId}/templates`, label: "Управление шаблонами" }
       ]
     }
   ];
