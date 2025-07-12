@@ -1,0 +1,147 @@
+.training-manager {
+    width: 90%;
+    margin: auto;
+}
+
+.week-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.schedule {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.header {
+    display: flex;
+}
+
+.time-header {
+    width: 100px; 
+}
+
+.day-header {
+    flex-grow: 1; 
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.times {
+    display: flex;
+    flex-direction: column;
+}
+
+.trainings-column{
+    display: flex;
+    flex-direction: row;
+}
+.days{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.time-slot{
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    display: flex;
+    border: 1px solid #ddd;
+}
+.time-column{
+    width: 50px;
+    margin-right: 10px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+.training-card {
+    display: flex;
+    flex-direction: row;
+    border-radius: 4px;
+    padding: 0px;
+    margin: 5px;
+    width: 180px;
+    height: 150px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+    transition: box-shadow 0.3s; 
+    transition: transform 0.2s;
+
+}
+
+.training-card:hover{
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+    transform: scale(1.03);
+}
+.back-line{
+    background-color: #EC823A;
+    width: 5px;
+    border-radius: 4px 0px 0px 4px;
+    padding: 0px;
+}
+.training-card > div:not(.back-line){
+    padding: 5px;
+} 
+
+.training-card-info > h4{
+    margin: 10px 10px;
+}
+.training-card-info > p{
+    margin: 5px 10px;
+    color: #555555;
+}
+.week-navigation-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.no-trainings-container{
+    margin-top: 20px;
+}
+
+/* Модальное окно */
+.modal{
+    margin: 0;
+    padding-bottom: 20px;
+}
+
+.head-info-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 35px 25px 5px 25px;
+}
+.head-info-container > h3{
+    margin: 0;
+}
+.order-info-container{
+    background-color: #e2e2e2;
+    padding: 15px 25px 15px 25px;
+    margin: 10px 0;
+}
+.title-modal{
+    font-weight: bold;
+}
+.modal > .text-info-container{
+    padding: 15px 25px 15px 25px;
+}
+.modal > .trainer-img-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}
+.name-spec-container{
+    padding: 20px 0px;
+}
+.name-spec-container > h3{
+    margin: 0;
+}
+
+.training-card.cancelled {
+    background-color: #ffd5db;
+}

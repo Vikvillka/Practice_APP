@@ -1,0 +1,99 @@
+.center-card-container{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(100px, 1fr)); 
+    gap: 10px;
+}
+.center-card {
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    width: minMax;
+    transition: box-shadow 0.3s; 
+    transition: transform 0.3s ease;
+}
+.cards-container{
+    margin-top: 20px;
+}
+.card-content p {
+    margin:  0 0 5px 0;
+    font-size: 16px;
+}
+.card-content h3 {
+    margin: 0 0 30px 8px;
+}
+.card-content > .icon-select-container{
+    padding:  0 0 10px 0px;
+}
+.center-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+}
+
+.custom-select-container {
+    margin-bottom: 20px;
+    position: relative;
+    width: 250px;
+    border: 0 0 1px 0 1 solid black ;
+}
+.icon-select-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.custom-select-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 0px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #424348;
+    border-bottom: 1px solid black;
+}
+
+.custom-select-list {
+    position: absolute;
+    top: 70%;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    max-height: 200px; 
+    overflow-y: auto; 
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.322);
+    z-index: 100;
+    padding: 0;
+    list-style-type: none;
+}
+
+.custom-select-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    border-top: 1px solid rgba(227, 114, 67, 0.1);
+}
+
+.custom-select-item:hover {
+    background-color: rgba(227, 114, 67, 0.1);
+    color: #e37243;
+}
+.custom-select-header > .arrow {
+    display: inline-block;
+    margin-top: 2px;
+    margin-left: 8px; 
+    width: 5px;
+    height: 5px;
+    margin: 10px 0px 0px 0px;
+    border: solid #424348;
+    border-width: 0 2px 2px 0;
+    transform: rotate(-135deg);
+    transition: transform 0.3s ease; 
+}
+
+.custom-select-header > .focus {
+    transform: rotate(45deg);
+}
+

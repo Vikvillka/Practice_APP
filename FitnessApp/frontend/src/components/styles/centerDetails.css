@@ -1,0 +1,83 @@
+.parallax{
+  height: 75vh;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-image: url(../../../public/img/forParalax.jpg);
+  background-color: rgba(0, 0, 0, 0.742); 
+  margin-bottom: 60px;
+  margin-top: 0px;
+}
+.contact-section {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  height: 100%;
+  color: #e2e2e2d7;
+  /* padding: 120px 0px 10px 10%; */
+  justify-content: center;
+  background: rgba(50, 48, 48, 0.838);
+}
+.contact-section  p{
+    width: 50%;
+    font: 300 calc(12px + 4 * (100vw/1440) ) Inter, sans-serif;
+}
+.contact-section > .buttons-container{
+    padding-top: 40px;
+
+}
+
+.contact-details-container {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+    margin-top: 20px;
+    gap: 40px;
+  }
+  
+  .contact-block {
+    flex: 1;
+    border-right: 2px solid #e0e0e0;
+    padding-right: 20px;
+  }
+  
+  .contact-block:last-child {
+    border-right: none;
+  }
+  
+  .contact-block h3 {
+    margin-bottom: 10px;
+  }
+  
+  .contact-block p {
+    margin: 10px 0;
+    font: 300 calc(14px + 4 * (100vw/1440) ) Inter, sans-serif;
+  }
+  
+.contact-block  .schedule {
+    display: flex;
+    margin-top: 0px;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 20px;
+  }
+
+  .card-subscription {
+    flex: 1 1 300px;
+    border-radius: 10px;
+    padding: 24px;
+    background: linear-gradient(135deg, #e37243 0%, rgb(241, 184, 123) 100%);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+  }
+  
+  .card-subscription:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+  }
+  
+  

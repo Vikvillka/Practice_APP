@@ -1,0 +1,232 @@
+.header{
+    background-color: #2E2E2E;
+    display: flex;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+    padding: 0px 6%;
+}
+.header-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* админ навигация */
+  .links-button-container{
+    display: flex;
+    flex-direction: row;
+  }
+  .logo-container{
+    height: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+  }
+  
+  .link-container{
+    display: flex;
+    align-items: center;
+  }
+  .links{
+    margin-top: 3px;
+    font: 300 calc(12px + 4 * (100vw/1440) ) Inter, sans-serif;
+    text-decoration: none;
+    color: #F4F1EF;
+    cursor: pointer;
+  }
+
+  .dropdown{
+    margin-top: 3px;
+    font: 300 calc(12px + 4 * (100vw/1440) ) Inter, sans-serif;
+    text-decoration: none;
+    color: #F4F1EF;
+    cursor: pointer;
+  }
+
+  .links:hover{
+    cursor: pointer;
+  }
+
+  .burger-checkbox{
+    visibility: hidden;
+  }
+  .burger{
+    visibility: hidden;
+  }
+  .menu-list{
+    display: flex;
+    align-items: center;
+    gap: 3.125vw;
+    padding-right: 5.833vw;
+  }
+  .menu-list > li{
+    list-style-type: none; 
+    padding: 0; 
+    margin: 0;
+  }
+  
+.nav-appbar {
+  background-color: #2E2E2E;
+  margin-bottom: 20px;
+}
+
+.nav-toolbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 6%;
+}
+
+.desktop-menu {
+  display: flex;
+  align-items: center;
+  gap: 3.125vw;
+}
+
+.desktop-menu a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #F4F1EF;
+  font: 200 calc(12px + 4 * (100vw/1440)) Inter, sans-serif;
+  transition: color 0.3s;
+}
+
+.desktop-menu a:hover {
+  color: #e37243;
+}
+
+.desktop-menu a.active {
+  color: #e37243;
+  font-weight: bold;
+}
+
+.mobile-menu .MuiPaper-root {
+  background-color: #2E2E2E !important;
+  color: #F4F1EF !important;
+  width: 60%;
+}
+
+.mobile-menu .MuiMenuItem-root {
+  padding: 12px 16px;
+}
+
+.mobile-menu .MuiDivider-root {
+  background-color: #666;
+}
+
+.mobile-menu .MuiListItemIcon-root {
+  min-width: 36px !important;
+  color: #F4F1EF;
+}
+
+.active-link {
+  position: relative;
+}
+
+.link::after  {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0%;
+  height: 1.5px;
+  border-radius: 20%;
+  background-color: #e37243;
+  transition: all 0.4s ease;
+}
+
+.active-link::after  {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 26%;
+  height: 1.5px;
+  border-radius: 20%;
+  background-color: #e37243;
+  transition: all 0.4s ease;
+}
+
+
+.links a:hover::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  border-radius: 20%;
+  height: 1.5px;
+  background-color: #e37243;
+}
+
+.menu-list {
+  display: flex;
+  align-items: center;
+  gap: 3.125vw;
+  padding-right: 5.833vw;
+  list-style: none;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #2E2E2E;
+  padding: 10px 0;
+  border-radius: 0 0 5px 5px;
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 5px 15px;
+  display: block;
+}
+
+.dropdown-item:hover {
+  color: #e37243 !important;
+}
+
+.arrow {
+  display: inline-block;
+  margin-left: 8px;
+  width: 5px;
+  height: 5px;
+  border: solid #e37243;
+  border-width: 0 2px 2px 0;
+  transform: rotate(-135deg);
+  transition: transform 0.3s ease;
+}
+
+.dropdown:hover .arrow {
+  transform: rotate(45deg);
+}
+
+.active-link {
+  position: relative;
+}
+
+.active-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #e37243;
+}
+
+@media (max-width: 960px) {
+  .menu-list .active-link::after {
+    display: none;
+  }
+}
