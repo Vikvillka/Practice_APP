@@ -67,6 +67,7 @@ namespace Fitness.Core.Services
                         TemplateId = t.TemplateId,
                         TrainerId = t.TrainerId,
                         CenterId = t.CenterId,
+                        CurrentParticipants = t.CurrentParticipants,
                         Template = templates.FirstOrDefault(temp => temp.TemplateId == t.TemplateId),
                         Trainer = trainer,
                     };

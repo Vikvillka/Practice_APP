@@ -40,6 +40,7 @@ namespace Fitness.API.Controllers
                     TemplateId = t.TemplateId,
                     TrainerId = t.TrainerId,
                     CenterId = t.CenterId,
+                    CurrentParticipants = t.CurrentParticipants,
                     Template = t.Template != null ? new TemplateDto
                     {
                         TemplateId = t.Template.TemplateId,
@@ -53,7 +54,12 @@ namespace Fitness.API.Controllers
                         TrainerId = t.Trainer.TrainerId,
                         UserId = t.Trainer.UserId,
                         FirstName = t.Trainer.User?.FirstName,
-                        LastName = t.Trainer.User?.LastName
+                        LastName = t.Trainer.User?.LastName,
+                        Email = t.Trainer.User?.Email,
+                        Description = t.Trainer.Description,
+                        ExperienceYears = t.Trainer.ExperienceYears,
+                        Specialization = t.Trainer.Specialization,
+                        ImgUrl = t.Trainer.Img
                     } : null
                 }));
             }
@@ -79,6 +85,7 @@ namespace Fitness.API.Controllers
                     TemplateId = training.TemplateId,
                     TrainerId = training.TrainerId,
                     CenterId = training.CenterId,
+                    CurrentParticipants = training.CurrentParticipants,
                     Template = training.Template != null ? new TemplateDto
                     {
                         TemplateId = training.Template.TemplateId,
@@ -91,7 +98,12 @@ namespace Fitness.API.Controllers
                     {
                         TrainerId = training.Trainer.TrainerId,
                         FirstName = training.Trainer.User?.FirstName,
-                        LastName = training.Trainer.User?.LastName
+                        LastName = training.Trainer.User?.LastName,
+                        Email = training.Trainer.User?.Email,
+                        Description = training.Trainer.Description,
+                        ExperienceYears = training.Trainer.ExperienceYears,
+                        Specialization = training.Trainer.Specialization,
+                        ImgUrl = training.Trainer.Img
                     } : null
                 });
             }

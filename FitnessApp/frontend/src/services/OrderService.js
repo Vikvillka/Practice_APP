@@ -3,7 +3,7 @@ import axiosBaseQuery from '../http/axiosBaseQuery'
 
 export const orderAPI = createApi({
     reducerPath: 'orderAPI',
-    baseQuery: axiosBaseQuery({ baseUrl: 'http://localhost:5000/api/order' }),
+    baseQuery: axiosBaseQuery({ baseUrl: 'https://localhost:7066/api/order' }),
     endpoints: (build) => ({
         fetchAllOrders: build.query({
             query: () => {

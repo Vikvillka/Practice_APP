@@ -94,42 +94,16 @@ const Profile = observer(() => {
     };
 
     const userOrders = React.useMemo(() => {
-        const ordersByTraining = orders.reduce((acc, order) => {
-            if (order.UserID !== store.user.UserID || !order.Training || !order.Training.DateTime) {
-                return acc;
-            }
-            
-            if (!acc[order.TrainingID]) {
-                acc[order.TrainingID] = [];
-            }
-            acc[order.TrainingID].push(order);
-            return acc;
-        }, {});
-
-        const ordersToShow = [];
-        Object.values(ordersByTraining).forEach(trainingOrders => {
-            const activeOrder = trainingOrders.find(o => o.Status === 'active');
-            
-            if (activeOrder) {
-                ordersToShow.push(activeOrder);
-            } else {
-                const sorted = [...trainingOrders].sort((a, b) => 
-                    new Date(b.createdAt) - new Date(a.createdAt)
-                );
-                if (sorted.length > 0) {
-                    ordersToShow.push(sorted[0]);
+        return orders
+            .filter(order => order.UserID === store.user.UserID && order.Training && order.Training.DateTime && order.Status === 'Active')
+            .reduce((acc, order) => {
+                const date = dayjs(order.Training.DateTime).format('YYYY-MM-DD');
+                if (!acc[date]) {
+                    acc[date] = [];
                 }
-            }
-        });
-
-        return ordersToShow.reduce((acc, order) => {
-            const date = dayjs(order.Training.DateTime).format('YYYY-MM-DD');
-            if (!acc[date]) {
-                acc[date] = [];
-            }
-            acc[date].push(order);
-            return acc;
-        }, {});
+                acc[date].push(order);
+                return acc;
+            }, {});
     }, [orders, store.user.UserID]);
 
     const handleCancelOrder = async (orderId) => {
@@ -177,19 +151,19 @@ const Profile = observer(() => {
     };
 
     const getTrainingStatusText = (training) => {
-        if (training.Status === 'cancelled') return 'Отменена тренером';
-        if (training.Status === 'closed') return 'Закрыта';
+        if (training.Status === 'Cancelled') return 'Отменена тренером';
+        if (training.Status === 'Closed') return 'Закрыта';
         return 'Активна';
     };
 
     const isTrainingDisabled = (training) => {
-        return training.Status === 'closed' || 
-               training.Status === 'cancelled' ||
+        return training.Status === 'Closed' || 
+               training.Status === 'Cancelled' ||
                dayjs(training.DateTime).isBefore(dayjs(), 'day');
     };
 
     const isTrainingCancelled = (training) => {
-        return training.Status === 'cancelled';
+        return training.Status === 'Cancelled';
     };
 
     if (isLoading) {
@@ -423,7 +397,7 @@ const Profile = observer(() => {
                                         dayOrders.map(order => {
                                             const isDisabled = isTrainingDisabled(order.Training);
                                             const isCancelled = isTrainingCancelled(order.Training);
-                                            const isUserCancelled = order.Status === 'cancelled';
+                                            const isUserCancelled = order.Status === 'Cancelled';
 
                                             return (
                                                 <Card 
@@ -479,7 +453,7 @@ const Profile = observer(() => {
                                                             getTrainingStatusText(order.Training)}
                                                         </Typography>
                                                             
-                                                        {order.Status === 'active' && !isCancelled && (
+                                                        {order.Status === 'Active' && !isCancelled && (
                                                             <Button
                                                                 variant="outlined"
                                                                 size="small"
@@ -494,7 +468,7 @@ const Profile = observer(() => {
                                                                         backgroundColor: isDisabled ? 'transparent' : 'rgba(227, 114, 67, 0.1)'
                                                                     }
                                                                 }}
-                                                                onClick={() => handleCancelOrder(order.OrderID)}
+                                                                onClick={() => handleCancelOrder(order.OrderId)}
                                                             >
                                                                 Отменить запись
                                                             </Button>

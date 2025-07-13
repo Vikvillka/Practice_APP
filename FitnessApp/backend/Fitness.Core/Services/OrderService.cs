@@ -16,6 +16,7 @@ namespace Fitness.Core.Services
         private readonly IRepository<Training> _trainingRepository;
         private readonly IUserService _userService;
         private readonly IRepository<Template> _templateRepository;
+        private readonly ITrainingService _trainingService;
 
         public OrderService(
             IRepository<Order> orderRepository,
@@ -41,12 +42,20 @@ namespace Fitness.Core.Services
 
             var usersDict = await _userService.GetUsersByIdsAsync(userIds);
 
-            return orders.Select(o => new Order
+            return orders.Select(o => 
             {
-                OrderId = o.OrderId,
-                Status = o.Status,
-                Training = trainings.FirstOrDefault(t => t.TrainingId == o.TrainingId),
-                User = usersDict.TryGetValue(o.UserId, out var user) ? user : null
+                var training = trainings.FirstOrDefault(t => t.TrainingId == o.TrainingId);
+                if (training != null)
+                {
+                    training.Template = templates.FirstOrDefault(t => t.TemplateId == training.TemplateId);
+                }
+                return new Order
+                {
+                    OrderId = o.OrderId,
+                    Status = o.Status,
+                    Training = training,
+                    User = usersDict.TryGetValue(o.UserId, out var user) ? user : null
+                };
             })
             .OrderBy(o => o.Training?.DateTime)
             .ToList();
@@ -68,12 +77,20 @@ namespace Fitness.Core.Services
 
             var user = await _userService.GetUserByIdAsync(userId);
 
-            return orders.Select(o => new Order
+            return orders.Select(o => 
             {
-                OrderId = o.OrderId,
-                Status = o.Status,
-                Training = trainings.FirstOrDefault(t => t.TrainingId == o.TrainingId),
-                User = user
+                var training = trainings.FirstOrDefault(t => t.TrainingId == o.TrainingId);
+                if (training != null)
+                {
+                    training.Template = templates.FirstOrDefault(t => t.TemplateId == training.TemplateId);
+                }
+                return new Order
+                {
+                    OrderId = o.OrderId,
+                    Status = o.Status,
+                    Training = training,
+                    User = user
+                };
             })
             .OrderBy(o => o.Training?.DateTime)
             .ToList();
@@ -90,8 +107,10 @@ namespace Fitness.Core.Services
             var userIds = orders.Select(o => o.UserId).Distinct().ToList();
 
             var training = await _trainingRepository.GetByIdAsync(trainingId);
-            var template = training != null ? await _templateRepository.GetByIdAsync(training.TemplateId) : null;
-
+            if (training != null)
+            {
+                training.Template = await _templateRepository.GetByIdAsync(training.TemplateId);
+            }
             var usersDict = await _userService.GetUsersByIdsAsync(userIds);
 
             return orders.Select(o => new Order

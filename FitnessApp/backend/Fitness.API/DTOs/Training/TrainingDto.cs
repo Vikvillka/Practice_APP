@@ -20,6 +20,8 @@ namespace Fitness.API.DTOs.Training
         public int TrainerId { get; set; }
         [JsonPropertyName("CenterId")]
         public int CenterId { get; set; }
+        [JsonPropertyName("CurrentParticipants")]
+        public int CurrentParticipants { get; set; }
         [JsonPropertyName("Template")]
         public TemplateDto Template { get; set; }
         [JsonPropertyName("Trainer")]

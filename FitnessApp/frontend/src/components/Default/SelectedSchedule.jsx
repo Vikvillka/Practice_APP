@@ -84,7 +84,7 @@ const orangeHover = '#DF8A51';
 
     useEffect(() => {
         refetch();
-    }, [store.user.UserID, refetch]);
+    }, [store.user.UserId, refetch]);
     
     const toggleTitleDropdown = () => {
         setIsOpenTitleSelect(!isOpenTitleSelect);
@@ -121,17 +121,17 @@ const orangeHover = '#DF8A51';
     }, []);
 
     useEffect(() => {
-      if (orders && store.user.UserID) {
+      if (orders && store.user.UserId) {
           const userOrders = orders.filter(order => 
-              order.UserID === store.user.UserID && 
-              order.Status === 'active'
+              order.UserId === store.user.UserId && 
+              order.Status === 'Active'
           );
           setUserOrders(userOrders);
       }
-    }, [orders, store.user.UserID]);
+    }, [orders, store.user.UserId]);
 
     const isUserRegistered = (trainingId) => {
-        return userOrders.some(order => order.TrainingID === trainingId);
+        return userOrders.some(order => order.TrainingId === trainingId);
     };
 
     useEffect(() => {
@@ -150,7 +150,7 @@ const filteredTrainings = useMemo(() => {
     if (!center || !trainings) return [];
     
     let filtered = trainings.filter(training =>
-        training?.CenterID === center.CenterID &&
+        training?.CenterId === center.CenterId &&
         (selectedTitle === '' || training.Template.Title === selectedTitle)
     );
 
@@ -262,7 +262,7 @@ const timeSlots = useMemo(() => {
         return;
       }
 
-      if (isUserRegistered(selectedTraining.TrainingID)) {
+      if (isUserRegistered(selectedTraining.TrainingId)) {
           setError('Вы уже записаны на эту тренировку');
           setTimeout(() => setError(null), 3000);
           return;
@@ -277,8 +277,8 @@ const timeSlots = useMemo(() => {
       }
 
       const orderData = {
-          TrainingID: selectedTraining.TrainingID,
-          UserID: store.user.UserID,
+          TrainingID: selectedTraining.TrainingId,
+          UserID: store.user.UserId,
       };
 
       try {
@@ -287,7 +287,7 @@ const timeSlots = useMemo(() => {
           
           setLocalTrainings(prevTrainings => {
               return prevTrainings.map(training => {
-                  if (training.TrainingID === selectedTraining.TrainingID) {
+                  if (training.TrainingId === selectedTraining.TrainingId) {
                       return {
                           ...training,
                           CurrentParticipants: training.CurrentParticipants + 1
@@ -322,11 +322,11 @@ const timeSlots = useMemo(() => {
     };
 
     const renderTrainingCard = (training) => {
-        const isRegistered = isUserRegistered(training.TrainingID);
+        const isRegistered = isUserRegistered(training.TrainingId);
         
         return (
             <Card
-                key={training.TrainingID}
+                key={training.TrainingId}
                 onClick={() => !isTrainingDisabled(training) && handleOpenModal(training)}
                 sx={{ 
                     mb: 1,
@@ -839,7 +839,7 @@ const timeSlots = useMemo(() => {
                                     {selectedTraining.Trainer.Img ? (
                                         <CardMedia
                                             component="img"
-                                            image={`http://localhost:5000/static/${selectedTraining.Trainer.Img}`}
+                                            image={`https://localhost:7066/api/trainer/${selectedTraining.TrainerId}/image`}
                                             alt={`Trainer ${selectedTraining.Trainer.TrainingID}`}
                                             sx={{
                                                 width: 80,
@@ -862,12 +862,12 @@ const timeSlots = useMemo(() => {
                                     
                                     <Box>
                                         <Typography variant="h6" color="#2E2E2E">
-                                            {selectedTraining.Trainer.User.FirstName} {selectedTraining.Trainer.User.LastName}
+                                            {selectedTraining.Trainer.FirstName} {selectedTraining.Trainer.LastName}
                                         </Typography>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
                                             <EmailIcon fontSize="small" color="action" />
                                             <Typography variant="body2" color="#666">
-                                                {selectedTraining.Trainer.User.Email}
+                                                {selectedTraining.Trainer.Email}
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -885,9 +885,9 @@ const timeSlots = useMemo(() => {
                                 </Box>
                             </Box>
 
-                            {store.user.Role === 'client' ? (
+                            {store.user.Role === 1 ? (
                                 <Box>
-                                    {isUserRegistered(selectedTraining.TrainingID) ? (
+                                    {isUserRegistered(selectedTraining.TrainingId) ? (
                                         <Alert  sx={{ mb: 2, backgroundColor: '#fff3e0', color: '#e65100'}}>
                                             Вы уже записаны на эту тренировку
                                         </Alert>
